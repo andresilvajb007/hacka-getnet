@@ -15,7 +15,7 @@ namespace hacka_getnet.Controllers
     public class IncentivadorController : ControllerBase
     {
         private readonly Context _context;
-
+        //
         public IncentivadorController(Context context)
         {
             _context = context;
