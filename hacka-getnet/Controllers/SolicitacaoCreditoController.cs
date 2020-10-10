@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using hacka_getnet;
 using hacka_getnet.Entidades;
 using AutoMapper;
+using Firebase.Storage;
+using System.IO;
 
 namespace hacka_getnet.Controllers
 {
@@ -85,9 +87,41 @@ namespace hacka_getnet.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<SolicitacaoCreditoDTO>> PostSolicitacaoCredito(CadastroSolicitacaoCreditoDTO solicitacaoCreditoDTO)
+        public async Task<ActionResult<SolicitacaoCreditoDTO>> PostSolicitacaoCredito(
+            [FromForm] CadastroSolicitacaoCreditoDTO solicitacaoCreditoDTO,
+            IFormFile file)
         {
             var solicitacaoCredito = _mapper.Map<CadastroSolicitacaoCreditoDTO, SolicitacaoCredito>(solicitacaoCreditoDTO);
+
+            string Bucket = "hacka-getnet.appspot.com";
+            MemoryStream stream = null;
+
+            if (file.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    file.CopyTo(ms);
+                    var fileBytes = ms.ToArray();
+                    stream = new MemoryStream(fileBytes);
+                }
+            }
+
+            long dateLong = DateTime.Now.Ticks;
+            var extensao = Path.GetExtension(file.FileName);
+
+            string nomeArquivo = $"{dateLong}{extensao}";
+
+            var urlImagem = await new FirebaseStorage(Bucket)
+                .Child("SolicitacaoCredito")
+                .Child(nomeArquivo)
+                .PutAsync(stream);
+
+            if (!string.IsNullOrEmpty(urlImagem))
+            {
+
+                solicitacaoCredito.UrlImagem = urlImagem;
+            }
+            
             _context.SolicitacaoCredito.Add(solicitacaoCredito);
             await _context.SaveChangesAsync();
 

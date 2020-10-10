@@ -99,6 +99,12 @@ namespace hacka_getnet.Migrations
                     b.Property<string>("Motivo")
                         .HasColumnType("text");
 
+                    b.Property<int>("QuantidadeParcelasReembolso")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UrlImagem")
+                        .HasColumnType("text");
+
                     b.Property<decimal>("Valor")
                         .HasColumnType("numeric");
 

@@ -16,7 +16,12 @@ namespace hacka_getnet.Entidades
 
         public DateTime DataSolicitacao { get; set; }
 
-         public List<ComprovanteIncentivo> ComprovanteIncentivo { get; set; }
+        public List<ComprovanteIncentivo> ComprovanteIncentivo { get; set; }
+
+        public string UrlImagem { get; set; }
+
+        public int QuantidadeParcelasReembolso { get; set; }
+
 
         public SolicitacaoCredito()
         {
