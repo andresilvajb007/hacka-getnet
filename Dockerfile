@@ -6,8 +6,8 @@ EXPOSE 80
 # copy and publish app and libraries
 COPY . ./
 
-RUN dotnet restore
-RUN dotnet build --no-restore -c Release
+RUN dotnet restore ./hacka-getnet.sln
+RUN dotnet build  ./hacka-getnet.sln --no-restore -c Release
 
 
 
