@@ -4,7 +4,7 @@ EXPOSE 80
 
 
 # copy and publish app and libraries
-COPY . ./hacka-getnet/
+COPY . ./
 
 
 RUN dotnet restore ./hacka-getnet/hacka-getnet.sln
