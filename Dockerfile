@@ -11,7 +11,7 @@ RUN dotnet build --no-restore -c Release
 
 
 
-RUN dotnet publish hacka-getnet.sln -c Release -o published
+RUN dotnet publish ./hacka-getnet.sln -c Release -o published
 
 
 CMD ASPNETCORE_URLS=http://*:$PORT dotnet published/hacka-getnet.dll
