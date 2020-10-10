@@ -7,7 +7,7 @@ EXPOSE 80
 COPY . ./
 
 
-RUN dotnet publish ./hacka-getnet.sln -c Release -o published
+RUN dotnet publish ./hacka-getnet/hacka-getnet.sln -c Release -o published
 
 
 CMD ASPNETCORE_URLS=http://*:$PORT dotnet published/hacka-getnet.dll
