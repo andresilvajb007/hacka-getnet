@@ -16,12 +16,29 @@ namespace hacka_getnet
         public DbSet<Incentivador> Incentivador { get; set; }
         public DbSet<Empreendedor> Empreendedor { get; set; }
         public DbSet<SolicitacaoCredito> SolicitacaoCredito { get; set; }
+        public DbSet<ComprovanteIncentivo> ComprovanteIncentivo { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Incentivador>(ConfigureIncentivador);
             modelBuilder.Entity<Empreendedor>(ConfigureEmpreendedor);
             modelBuilder.Entity<SolicitacaoCredito>(ConfigureSolicitacaoCredito);
+            modelBuilder.Entity<ComprovanteIncentivo>(ConfigureComprovanteIncentivo);
+
+        }
+
+        private void ConfigureComprovanteIncentivo(EntityTypeBuilder<ComprovanteIncentivo> obj)
+        {
+            obj.HasKey(x => x.Id);
+
+            obj.HasOne(x => x.Incentivador)
+                .WithMany(x => x.ComprovanteIncentivo)
+                .HasForeignKey(x => x.IncentivadorId);
+
+            obj.HasOne(x => x.SolicitacaoCredito)
+                .WithMany(x => x.ComprovanteIncentivo)
+                .HasForeignKey(x => x.SolicitacaoCreditoId);
+
 
         }
 

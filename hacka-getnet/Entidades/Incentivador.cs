@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace hacka_getnet.Entidades
 {
     public class Incentivador
@@ -8,6 +10,8 @@ namespace hacka_getnet.Entidades
         public string Nome { get; set; }
 
         public string ChavePix { get; set; }
+
+        public List<ComprovanteIncentivo> ComprovanteIncentivo { get; set; }
 
         public Incentivador()
         {

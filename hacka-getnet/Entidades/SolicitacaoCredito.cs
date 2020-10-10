@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace hacka_getnet.Entidades
 {
     public class SolicitacaoCredito
@@ -13,6 +15,8 @@ namespace hacka_getnet.Entidades
         public decimal Valor { get; set; }
 
         public DateTime DataSolicitacao { get; set; }
+
+         public List<ComprovanteIncentivo> ComprovanteIncentivo { get; set; }
 
         public SolicitacaoCredito()
         {

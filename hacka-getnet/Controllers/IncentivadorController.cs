@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using hacka_getnet;
 using hacka_getnet.Entidades;
 using AutoMapper;
+using System.IO;
+using Firebase.Storage;
 
 namespace hacka_getnet.Controllers
 {
@@ -111,6 +113,68 @@ namespace hacka_getnet.Controllers
             await _context.SaveChangesAsync();
 
             return incentivador;
+        }
+
+        [Route("upload-comprovante")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UploadAsync(IFormFile file, int idIncentivador, int idSolicitacaoCredito)
+        {
+            var incentivador = await _context.Incentivador.FindAsync(idIncentivador);
+            if (incentivador == null)
+            {
+                return NotFound();
+            }
+
+
+            var solicitacaoCredito = await _context.SolicitacaoCredito.FindAsync(idSolicitacaoCredito);
+            if (solicitacaoCredito == null)
+            {
+                return NotFound();
+            }
+
+
+            string Bucket = "hacka-getnet.appspot.com";
+            MemoryStream stream = null;
+
+            if (file.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    file.CopyTo(ms);
+                    var fileBytes = ms.ToArray();
+                    stream = new MemoryStream(fileBytes);
+                }
+            }
+
+            long dateLong = DateTime.Now.Ticks;
+            var extensao = Path.GetExtension(file.FileName);
+
+            string nomeArquivo = $"{dateLong}{extensao}";
+
+            var urlImagem = await new FirebaseStorage(Bucket)
+                //.Child("Usuario")
+                .Child(nomeArquivo)
+                .PutAsync(stream);
+
+            if(!string.IsNullOrEmpty(urlImagem))
+            {
+                _context.ComprovanteIncentivo.Add(new ComprovanteIncentivo
+                {
+                    IncentivadorId = idIncentivador,
+                    SolicitacaoCreditoId = idSolicitacaoCredito,
+                    DataUpload = DateTime.Now,
+                    UrlImagem = urlImagem,
+                });
+
+                await _context.SaveChangesAsync();
+            }            
+
+
+            return Created(urlImagem, urlImagem);
         }
 
         private bool IncentivadorExists(int id)
