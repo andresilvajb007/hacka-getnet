@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using hacka_getnet.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 namespace hacka_getnet
 {
@@ -18,7 +20,7 @@ namespace hacka_getnet
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = configuration;            
         }
 
         public IConfiguration Configuration { get; }
@@ -29,7 +31,7 @@ namespace hacka_getnet
             services.AddControllers();
             services.AddDbContext<Context>(options => options.UseNpgsql("Host=ec2-18-211-86-133.compute-1.amazonaws.com; Port=5432;Database=d6lcvimj2nsnf6;Username=qrknctdtlwfoja;Password=eaf84382d7d50937d08c72b3615f021ed5dd1f119c5c56e21231f0d465b10f12;SSL Mode=Require; Trust Server Certificate=true;"));
 
-
+            services.AddAutoMapper(typeof(Startup));
             services.AddSwaggerGen(x => x.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Version = "V1", Description = "API de Credito para o APP" })); 
         }
 
@@ -42,7 +44,7 @@ namespace hacka_getnet
             }
 
             //app.UseHttpsRedirection();
-
+            
             app.UseSwagger();
             app.UseSwaggerUI(x =>
             {

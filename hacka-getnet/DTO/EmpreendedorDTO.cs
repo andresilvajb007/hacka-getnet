@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace hacka_getnet.Entidades
 {
-    public class Empreendedor
+    public class EmpreendedorDTO
     {
         public int Id { get; set; }
 
@@ -12,9 +12,9 @@ namespace hacka_getnet.Entidades
 
         public string ChavePix { get; set; }
 
-        public List<SolicitacaoCredito> SolicitacoesCredito { get; set; }
+        public List<SolicitacaoCreditoDTO> SolicitacaoCreditoDTO { get; set; }
 
-        public Empreendedor()
+        public EmpreendedorDTO()
         {
         }
     }

@@ -15,17 +15,29 @@ namespace hacka_getnet
 
         public DbSet<Incentivador> Incentivador { get; set; }
         public DbSet<Empreendedor> Empreendedor { get; set; }
+        public DbSet<SolicitacaoCredito> SolicitacaoCredito { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Incentivador>(ConfigureIncentivador);
             modelBuilder.Entity<Empreendedor>(ConfigureEmpreendedor);
+            modelBuilder.Entity<SolicitacaoCredito>(ConfigureSolicitacaoCredito);
 
+        }
+
+        private void ConfigureSolicitacaoCredito(EntityTypeBuilder<SolicitacaoCredito> obj)
+        {
+            obj.HasKey(x => x.Id);
+
+            obj.HasOne(x => x.Empreendedor)
+                .WithMany(x=>x.SolicitacoesCredito)
+                .HasForeignKey(x=>x.EmpreendedorId);
         }
 
         private void ConfigureEmpreendedor(EntityTypeBuilder<Empreendedor> obj)
         {
             obj.HasKey(x => x.Id);
+            
         }
 
         private void ConfigureIncentivador(EntityTypeBuilder<Incentivador> obj)
