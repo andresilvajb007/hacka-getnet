@@ -10,6 +10,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [Entity FrameWork Core](https://docs.microsoft.com/pt-br/ef/core/get-started/?tabs=netcore-cli)
 - [Swagger](https://docs.microsoft.com/pt-br/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-3.1&tabs=visual-studio)
 - [PostGreSQL](https://www.postgresql.org)
+- [Auto Mapper](https://automapper.org)
 
 
 ## :computer: Projeto
