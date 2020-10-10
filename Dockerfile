@@ -7,8 +7,8 @@ EXPOSE 80
 COPY . ./hacka-getnet/
 
 
-RUN dotnet restore
-RUN dotnet build --no-restore -c Release
+RUN dotnet restore ./hacka-getnet/hacka-getnet.sln
+RUN dotnet build ./hacka-getnet/hacka-getnet.sln --no-restore -c Release
 
 RUN dotnet publish ./hacka-getnet/hacka-getnet.sln -c Release -o published
 
