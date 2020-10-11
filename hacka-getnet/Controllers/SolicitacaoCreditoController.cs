@@ -16,7 +16,7 @@ namespace hacka_getnet.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class SolicitacaoCreditoController : ControllerBase
     {
         private readonly Context _context;
@@ -30,6 +30,7 @@ namespace hacka_getnet.Controllers
 
         // GET: api/SolicitacaoCredito
         [HttpGet]
+        [Authorize(Roles = "Incentivador, Empreendedor")]
         public async Task<ActionResult<IEnumerable<SolicitacaoCreditoDTO>>> GetSolicitacaoCredito()
         {
             var lista = await _context.SolicitacaoCredito.ToListAsync();
@@ -40,6 +41,7 @@ namespace hacka_getnet.Controllers
 
         // GET: api/SolicitacaoCredito/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Incentivador, Empreendedor")]
         public async Task<ActionResult<SolicitacaoCreditoDTO>> GetSolicitacaoCredito(int id)
         {
             var solicitacaoCredito = await _context.SolicitacaoCredito.FindAsync(id);
@@ -52,43 +54,13 @@ namespace hacka_getnet.Controllers
             var dto = _mapper.Map<SolicitacaoCredito, SolicitacaoCreditoDTO>(solicitacaoCredito);
             return dto;
         }
-
-        // PUT: api/SolicitacaoCredito/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutSolicitacaoCredito(int id, SolicitacaoCredito solicitacaoCredito)
-        //{
-        //    if (id != solicitacaoCredito.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(solicitacaoCredito).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!SolicitacaoCreditoExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
+       
 
         // POST: api/SolicitacaoCredito
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        [Authorize(Roles = "Empreendedor")]
         public async Task<ActionResult<SolicitacaoCreditoDTO>> PostSolicitacaoCredito(
             [FromForm] CadastroSolicitacaoCreditoDTO solicitacaoCreditoDTO,
             IFormFile file)
@@ -130,21 +102,6 @@ namespace hacka_getnet.Controllers
             return CreatedAtAction("GetSolicitacaoCredito", new { id = solicitacaoCredito.Id }, solicitacaoCredito);
         }
 
-        // DELETE: api/SolicitacaoCredito/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<SolicitacaoCredito>> DeleteSolicitacaoCredito(int id)
-        {
-            var solicitacaoCredito = await _context.SolicitacaoCredito.FindAsync(id);
-            if (solicitacaoCredito == null)
-            {
-                return NotFound();
-            }
-
-            _context.SolicitacaoCredito.Remove(solicitacaoCredito);
-            await _context.SaveChangesAsync();
-
-            return solicitacaoCredito;
-        }
 
         private bool SolicitacaoCreditoExists(int id)
         {
