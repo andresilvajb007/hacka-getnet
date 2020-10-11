@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using hacka_getnet;
 using hacka_getnet.Entidades;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using hacka_getnet.Token;
+using hacka_getnet.DTO;
 
 namespace hacka_getnet.Controllers
 {
@@ -24,8 +27,34 @@ namespace hacka_getnet.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost("Login")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Login([FromBody] LoginDTO loginDTO)
+        {
+            // Recupera o usuário
+            var user = await _context.Empreendedor.Where(x => x.Usuario == loginDTO.Usuario && x.Senha == loginDTO.Senha)
+                                                  .FirstOrDefaultAsync();
+
+            // Verifica se o usuário existe
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            // Gera o Token
+            var token = TokenService.GenerateToken(user.Usuario, "Empreendedor");
+
+            // Oculta a senha
+            user.Senha = "";
+
+            // Retorna os dados
+            return new
+            {
+                user = user,
+                token = token
+            };
+        }
         // GET: api/Empreendedor
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<EmpreendedorDTO>>> GetEmpreendedor()
         {
             var empreendedores = await _context.Empreendedor.ToListAsync();
@@ -36,6 +65,7 @@ namespace hacka_getnet.Controllers
 
         // GET: api/Empreendedor/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<EmpreendedorDTO>> GetEmpreendedor(int id)
         {
             var empreendedor = await _context.Empreendedor.FindAsync(id);
@@ -54,6 +84,7 @@ namespace hacka_getnet.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutEmpreendedor(int id, CadastroEmpreendedorDTO empreendedorDTO)
         {
             var empreendedor = _mapper.Map<CadastroEmpreendedorDTO, Empreendedor>(empreendedorDTO);
@@ -88,6 +119,7 @@ namespace hacka_getnet.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<EmpreendedorDTO>> PostEmpreendedor(CadastroEmpreendedorDTO empreendedorDTO)
         {
             var empreendedor = _mapper.Map<CadastroEmpreendedorDTO, Empreendedor>(empreendedorDTO);
@@ -100,6 +132,7 @@ namespace hacka_getnet.Controllers
 
         // DELETE: api/Empreendedor/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<Empreendedor>> DeleteEmpreendedor(int id)
         {
             var empreendedor = await _context.Empreendedor.FindAsync(id);

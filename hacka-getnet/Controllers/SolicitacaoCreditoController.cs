@@ -10,11 +10,13 @@ using hacka_getnet.Entidades;
 using AutoMapper;
 using Firebase.Storage;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace hacka_getnet.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SolicitacaoCreditoController : ControllerBase
     {
         private readonly Context _context;

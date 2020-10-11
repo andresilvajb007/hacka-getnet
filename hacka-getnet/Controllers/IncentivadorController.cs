@@ -10,6 +10,9 @@ using hacka_getnet.Entidades;
 using AutoMapper;
 using System.IO;
 using Firebase.Storage;
+using hacka_getnet.Token;
+using Microsoft.AspNetCore.Authorization;
+using hacka_getnet.DTO;
 
 namespace hacka_getnet.Controllers
 {
@@ -26,8 +29,36 @@ namespace hacka_getnet.Controllers
             _mapper = mapper;
         }
 
+
+        [HttpPost("Login")]        
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Login([FromBody] LoginDTO loginDTO)
+        {
+            // Recupera o usuário
+            var user = await _context.Incentivador.Where(x => x.Usuario == loginDTO.Usuario && x.Senha == loginDTO.Senha)
+                                                  .FirstOrDefaultAsync();
+
+            // Verifica se o usuário existe
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            // Gera o Token
+            var token = TokenService.GenerateToken(user.Usuario, "Incentivador");
+
+            // Oculta a senha
+            user.Senha = "";
+
+            // Retorna os dados
+            return new
+            {
+                user = user,                
+                token = token
+            };
+        }
+
         // GET: api/Incentivador
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<IncentivadorDTO>>> GetIncentivador()
         {
             var lista =  await _context.Incentivador.ToListAsync();
@@ -39,6 +70,7 @@ namespace hacka_getnet.Controllers
 
         // GET: api/Incentivador/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<IncentivadorDTO>> GetIncentivador(int id)
         {
             var incentivador = await _context.Incentivador.FindAsync(id);
@@ -56,6 +88,7 @@ namespace hacka_getnet.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutIncentivador(int id, CadastroIncentivadorDTO incentivadorDTO)
         {
             var incentivador = _mapper.Map<CadastroIncentivadorDTO, Incentivador>(incentivadorDTO);
@@ -90,6 +123,7 @@ namespace hacka_getnet.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<IncentivadorDTO>> PostIncentivador(CadastroIncentivadorDTO incentivadorDTO)
         {
             var incentivador = _mapper.Map<CadastroIncentivadorDTO, Incentivador>(incentivadorDTO);
@@ -101,6 +135,7 @@ namespace hacka_getnet.Controllers
 
         // DELETE: api/Incentivador/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<Incentivador>> DeleteIncentivador(int id)
         {
             var incentivador = await _context.Incentivador.FindAsync(id);
@@ -117,6 +152,7 @@ namespace hacka_getnet.Controllers
 
         [Route("upload-comprovante")]
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
