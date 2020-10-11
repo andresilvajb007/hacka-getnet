@@ -13,6 +13,9 @@ namespace hacka_getnet.Entidades
         public int SolicitacaoCreditoId { get; set; }
         public virtual SolicitacaoCredito SolicitacaoCredito { get; set; }
 
+        public decimal Valor { get; set; }
+
+
         public DateTime DataUpload { get; set; }
 
         public ComprovanteIncentivo()

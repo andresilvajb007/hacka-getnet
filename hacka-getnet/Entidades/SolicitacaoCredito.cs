@@ -7,6 +7,8 @@ namespace hacka_getnet.Entidades
     {
         public int Id { get; set; }
 
+        public string NomeNegocio { get; set; }
+
         public int EmpreendedorId { get; set; }
         public virtual Empreendedor Empreendedor { get; set; }
 
