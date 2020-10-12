@@ -1,6 +1,10 @@
 <h3 align="center">
-  O objetivo do projeto é conectar possíveis investidores dispostos a correr um risco moderado com o micro e pequeno empreendedor que está na busca de suporte financeiro. 
+  Backend(API's) do PLIM! 👽
 </h3>
+
+## Objetivo
+
+O objetivo do projeto é conectar possíveis investidores dispostos a correr um risco moderado com o micro e pequeno empreendedor que está na busca de suporte financeiro. 
 
 ## Status do projeto
 
