@@ -10,6 +10,14 @@ namespace hacka_getnet.Entidades
 
         public string Nome { get; set; }
 
+        public string PrimeiroNome { get; set; }
+
+        public string UltimoNome { get; set; }
+
+        public string Celular { get; set; }
+
+        public string CNPJ { get; set; }
+
         public string ChavePix { get; set; }
 
         public string Usuario { get; set; }
@@ -23,6 +31,10 @@ namespace hacka_getnet.Entidades
         public List<PagamentoEmpreendedorPIX> PagamentosRecebidos { get; set; }
 
         public List<CobrancaRecorrente> Cobrancas { get; set; }
+
+        public virtual EnderecoEmpreendedor Endereco { get; set; }
+
+        public virtual CartaoEmpreendedor Cartao { get; set; }
 
         public Empreendedor()
         {

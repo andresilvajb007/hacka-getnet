@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using hacka_getnet.DTO;
 using hacka_getnet.Entidades;
 
 namespace hacka_getnet.Mappers
@@ -17,6 +18,9 @@ namespace hacka_getnet.Mappers
             CreateMap<Empreendedor, EmpreendedorDTO>();
             CreateMap<Incentivador, IncentivadorDTO>();
             CreateMap<SolicitacaoCredito, SolicitacaoCreditoDTO>();
+
+            CreateMap<EnderecoEmpreendedor, EnderecoEmpreendedorDTO>();
+            CreateMap<CartaoEmpreendedor, CartaoEmpreendedorDTO>();
 
 
             CreateMap<EmpreendedorDTO, Empreendedor>();

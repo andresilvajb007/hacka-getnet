@@ -32,7 +32,8 @@ namespace hacka_getnet.Controllers
         public async Task<ActionResult<dynamic>> Login([FromBody] LoginDTO loginDTO)
         {
             // Recupera o usuário
-            var user = await _context.Empreendedor.Where(x => x.Usuario == loginDTO.Usuario && x.Senha == loginDTO.Senha)
+            var user = await _context.Empreendedor                
+                .Where(x => x.Usuario == loginDTO.Usuario && x.Senha == loginDTO.Senha)
                                                   .FirstOrDefaultAsync();
 
             // Verifica se o usuário existe
@@ -57,10 +58,21 @@ namespace hacka_getnet.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<EmpreendedorDTO>>> GetEmpreendedor()
         {
-            var empreendedores = await _context.Empreendedor.ToListAsync();
-            var dto = _mapper.Map<List<Empreendedor>, List<EmpreendedorDTO>>(empreendedores);
+            var empreendedores = await _context.Empreendedor.Include(x=>x.Endereco).Include(x=>x.Cartao).ToListAsync();
+            var lista = new List<EmpreendedorDTO>();
 
-            return dto;
+            foreach(var empreendedor in empreendedores)
+            {
+                var empreendedorDTO = _mapper.Map<Empreendedor,EmpreendedorDTO>(empreendedor);
+                empreendedorDTO.EnderecoEmpreendedorDTO = _mapper.Map<EnderecoEmpreendedor, EnderecoEmpreendedorDTO>(empreendedor.Endereco);
+                empreendedorDTO.CartaoEmpreendedorDTO = _mapper.Map<CartaoEmpreendedor, CartaoEmpreendedorDTO>(empreendedor.Cartao);
+
+                lista.Add(empreendedorDTO);
+            }
+            
+            
+
+            return lista;
         }
 
         // GET: api/Empreendedor/5
@@ -75,9 +87,11 @@ namespace hacka_getnet.Controllers
                 return NotFound();
             }
 
-            var dto = _mapper.Map<Empreendedor, EmpreendedorDTO>(empreendedor);
+            var empreendedorDTO = _mapper.Map<Empreendedor, EmpreendedorDTO>(empreendedor);
+            empreendedorDTO.EnderecoEmpreendedorDTO = _mapper.Map<EnderecoEmpreendedor, EnderecoEmpreendedorDTO>(empreendedor.Endereco);
+            empreendedorDTO.CartaoEmpreendedorDTO = _mapper.Map<CartaoEmpreendedor, CartaoEmpreendedorDTO>(empreendedor.Cartao);
 
-            return  dto;
+            return empreendedorDTO;
         }
 
         // PUT: api/Empreendedor/5

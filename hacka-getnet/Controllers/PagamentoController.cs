@@ -173,6 +173,24 @@ namespace hacka_getnet.Controllers
         }
 
 
+        [HttpGet("realiza-cobranca")]
+        public async Task<ActionResult> RealizarCobrancaDoEmpreendedor()
+        {
+            var data = new DateTime(2020, 11, 11);
+
+            var cobrancas = await _context.CobrancaRecorrente.Where(x => x.DataCobranca.Date == data.Date &&
+                                                                         x.StatusCobrancaRecorrente == StatusCobrancaRecorrente.PENDENTE_PAGAMENTO).ToListAsync();
+
+            foreach (var cobranca in cobrancas)
+            {
+                var empreendedor = await _context.Empreendedor.FindAsync(cobranca.EmpreendedorId);
+
+            }
+
+            return Ok();
+        }
+
+
         private async Task<string> GeraToken()
         {
             using (var httpClient = new HttpClient())

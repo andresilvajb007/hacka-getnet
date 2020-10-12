@@ -15,6 +15,8 @@ namespace hacka_getnet
 
         public DbSet<Incentivador> Incentivador { get; set; }
         public DbSet<Empreendedor> Empreendedor { get; set; }
+        public DbSet<EnderecoEmpreendedor> EnderecoEmpreendedor { get; set; }
+        public DbSet<CartaoEmpreendedor> CartaoEmpreendedor { get; set; }
         public DbSet<SolicitacaoCredito> SolicitacaoCredito { get; set; }
         public DbSet<ComprovanteIncentivo> ComprovanteIncentivo { get; set; }
         public DbSet<PagamentoEmpreendedorPIX> PagamentoEmpreendedorPIX { get; set; }
@@ -26,12 +28,25 @@ namespace hacka_getnet
         {
             modelBuilder.Entity<Incentivador>(ConfigureIncentivador);
             modelBuilder.Entity<Empreendedor>(ConfigureEmpreendedor);
+            modelBuilder.Entity<EnderecoEmpreendedor>(ConfigureEnderecoEmpreendedor);
+            modelBuilder.Entity<CartaoEmpreendedor>(ConfigureCartaoEmpreendedor);
             modelBuilder.Entity<SolicitacaoCredito>(ConfigureSolicitacaoCredito);
             modelBuilder.Entity<ComprovanteIncentivo>(ConfigureComprovanteIncentivo);
             modelBuilder.Entity<PagamentoEmpreendedorPIX>(ConfigurePagamentoEmpreendedorPIX);
             modelBuilder.Entity<PagamentoSolicitacaoCreditoPIX>(ConfigurePagamentoSolicitacaoCreditoPIX);
             modelBuilder.Entity<CobrancaRecorrente>(ConfigureCobrancaRecorrente);
             modelBuilder.Entity<ConfiguracaoApp>(ConfigureConfiguracaoApp);
+        }
+
+
+        private void ConfigureCartaoEmpreendedor(EntityTypeBuilder<CartaoEmpreendedor> obj)
+        {
+            obj.HasKey(x => x.Id);
+        }
+
+        private void ConfigureEnderecoEmpreendedor(EntityTypeBuilder<EnderecoEmpreendedor> obj)
+        {
+            obj.HasKey(x => x.Id);
         }
 
         private void ConfigureConfiguracaoApp(EntityTypeBuilder<ConfiguracaoApp> obj)
@@ -93,7 +108,17 @@ namespace hacka_getnet
         private void ConfigureEmpreendedor(EntityTypeBuilder<Empreendedor> obj)
         {
             obj.HasKey(x => x.Id);
-            
+
+            obj
+              .HasOne(a => a.Endereco)
+              .WithOne(b => b.Empreendedor)
+              .HasForeignKey<EnderecoEmpreendedor>(b => b.EmpreendedorId);
+
+            obj
+              .HasOne(a => a.Cartao)
+              .WithOne(b => b.Empreendedor)
+              .HasForeignKey<CartaoEmpreendedor>(b => b.EmpreendedorId);
+
         }
 
         private void ConfigureIncentivador(EntityTypeBuilder<Incentivador> obj)
