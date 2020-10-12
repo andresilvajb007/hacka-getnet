@@ -54,4 +54,4 @@ Para acessar a documentação via Swagger:
 
 ## License
 
-MIT © [Rocketseat](https://github.com/Rocketseat)
+MIT © [PLIM](https://github.com/Plim)
