@@ -33,6 +33,8 @@ namespace hacka_getnet.Entidades
 
         public List<PagamentoSolicitacaoCreditoPIX> Pagamentos { get; set; }
 
+        public List<CobrancaRecorrente> Cobrancas { get; set; }
+
         public StatusSolicitacaoCredito StatusSolicitacaoCredito { get; set; }
 
 

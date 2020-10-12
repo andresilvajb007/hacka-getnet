@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hacka_getnet;
@@ -9,9 +10,10 @@ using hacka_getnet;
 namespace hacka_getnet.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20201012162505_Add_Fix")]
+    partial class Add_Fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -338,9 +340,6 @@ namespace hacka_getnet.Migrations
                     b.Property<string>("IdTransacaoPIX")
                         .HasColumnType("text");
 
-                    b.Property<int>("IncentivadorId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("SolicitacaoCreditoId")
                         .HasColumnType("integer");
 
@@ -463,12 +462,6 @@ namespace hacka_getnet.Migrations
 
             modelBuilder.Entity("hacka_getnet.Entidades.PagamentoSolicitacaoCreditoPIX", b =>
                 {
-                    b.HasOne("hacka_getnet.Entidades.Incentivador", "Incentivador")
-                        .WithMany("PagamentosSolicitacao")
-                        .HasForeignKey("SolicitacaoCreditoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("hacka_getnet.Entidades.SolicitacaoCredito", "SolicitacaoCredito")
                         .WithMany("Pagamentos")
                         .HasForeignKey("SolicitacaoCreditoId")

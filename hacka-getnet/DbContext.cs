@@ -21,6 +21,7 @@ namespace hacka_getnet
         public DbSet<ComprovanteIncentivo> ComprovanteIncentivo { get; set; }
         public DbSet<PagamentoEmpreendedorPIX> PagamentoEmpreendedorPIX { get; set; }
         public DbSet<PagamentoSolicitacaoCreditoPIX> PagamentoSolicitacaoCreditoPIX { get; set; }
+        public DbSet<PagamentoIncentivadorPIX> PagamentoIncentivadorPIX { get; set; }
         public DbSet<CobrancaRecorrente> CobrancaRecorrente { get; set; }
         public DbSet<ConfiguracaoApp> ConfiguracaoApp { get; set; }
 
@@ -34,10 +35,19 @@ namespace hacka_getnet
             modelBuilder.Entity<ComprovanteIncentivo>(ConfigureComprovanteIncentivo);
             modelBuilder.Entity<PagamentoEmpreendedorPIX>(ConfigurePagamentoEmpreendedorPIX);
             modelBuilder.Entity<PagamentoSolicitacaoCreditoPIX>(ConfigurePagamentoSolicitacaoCreditoPIX);
+            modelBuilder.Entity<PagamentoIncentivadorPIX>(ConfigurePagamentoIncentivadorPIX);
             modelBuilder.Entity<CobrancaRecorrente>(ConfigureCobrancaRecorrente);
             modelBuilder.Entity<ConfiguracaoApp>(ConfigureConfiguracaoApp);
         }
 
+        private void ConfigurePagamentoIncentivadorPIX(EntityTypeBuilder<PagamentoIncentivadorPIX> obj)
+        {
+            obj.HasKey(x => x.Id);
+
+            obj.HasOne(x => x.Incentivador)
+                .WithMany(x => x.Pagamentos)
+                .HasForeignKey(x => x.IncentivadorId);
+        }
 
         private void ConfigureCartaoEmpreendedor(EntityTypeBuilder<CartaoEmpreendedor> obj)
         {
@@ -61,6 +71,10 @@ namespace hacka_getnet
             obj.HasOne(x => x.Empreendedor)
                 .WithMany(x => x.Cobrancas)
                 .HasForeignKey(x => x.EmpreendedorId);
+
+            obj.HasOne(x => x.SolicitacaoCredito)
+                .WithMany(x => x.Cobrancas)
+                .HasForeignKey(x => x.SolicitacaoCreditoId);
         }
 
         private void ConfigurePagamentoSolicitacaoCreditoPIX(EntityTypeBuilder<PagamentoSolicitacaoCreditoPIX> obj)
@@ -69,6 +83,10 @@ namespace hacka_getnet
 
             obj.HasOne(x => x.SolicitacaoCredito)
                 .WithMany(x => x.Pagamentos)
+                .HasForeignKey(x => x.SolicitacaoCreditoId);
+
+            obj.HasOne(x => x.Incentivador)
+                .WithMany(x => x.PagamentosSolicitacao)
                 .HasForeignKey(x => x.SolicitacaoCreditoId);
         }
 

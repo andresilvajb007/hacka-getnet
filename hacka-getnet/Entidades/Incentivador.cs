@@ -19,6 +19,10 @@ namespace hacka_getnet.Entidades
 
         public List<ComprovanteIncentivo> ComprovanteIncentivo { get; set; }
 
+        public List<PagamentoIncentivadorPIX> Pagamentos { get;  set; }
+
+        public List<PagamentoSolicitacaoCreditoPIX> PagamentosSolicitacao { get; set; }
+
         public Incentivador()
         {
         }

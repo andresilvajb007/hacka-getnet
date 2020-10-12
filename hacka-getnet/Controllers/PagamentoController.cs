@@ -67,6 +67,7 @@ namespace hacka_getnet.Controllers
             //Processou corretamento o PIX
             _context.PagamentoSolicitacaoCreditoPIX.Add(new PagamentoSolicitacaoCreditoPIX
             {
+                IncentivadorId = incentivador.Id,
                 ChavePixOrigem = incentivador.ChavePix,
                 ChavePixDestino = empreendedor.ChavePix,
                 IdTransacaoPIX = new Guid().ToString(),
@@ -141,6 +142,7 @@ namespace hacka_getnet.Controllers
                 new CobrancaRecorrente
                 {
                     EmpreendedorId = empreendedor.Id,
+                    SolicitacaoCreditoId = solicitacaoCredito.Id,
                     DataCobranca = DateTime.Now.AddMonths(i),
                     Valor = totalPagamento / solicitacaoCredito.QuantidadeParcelasReembolso,
                 });
@@ -176,13 +178,16 @@ namespace hacka_getnet.Controllers
         public async Task<ActionResult> RealizarCobrancaDoEmpreendedor()
         {
             var configuracaoApp = await _context.ConfiguracaoApp.FirstAsync();
-            var data = new DateTime(2020, 11, 11);
+            var data = DateTime.Now;
 
             var cobrancas = await _context.CobrancaRecorrente.Where(x => x.DataCobranca.Date == data.Date &&
                                                                          x.StatusCobrancaRecorrente == StatusCobrancaRecorrente.PENDENTE_PAGAMENTO).ToListAsync();
 
             foreach (var cobranca in cobrancas)
             {
+                var pagamentoSolictacao = await _context.PagamentoSolicitacaoCreditoPIX.Where(x => x.SolicitacaoCreditoId == cobranca.SolicitacaoCreditoId).FirstOrDefaultAsync();
+                var incentivador = await _context.Incentivador.FindAsync(pagamentoSolictacao.IncentivadorId);
+
                 var empreendedor = await _context.Empreendedor.Include(x => x.Endereco)
                                                 .Include(x => x.Cartao)
                                                 .Where(x => x.Id == cobranca.EmpreendedorId)
@@ -260,10 +265,23 @@ namespace hacka_getnet.Controllers
 
                 if(response.IsSuccessStatusCode)
                 {
+
+                    //Realiza Pagamento via PIX para o Incentivador
+
+                    _context.PagamentoIncentivadorPIX.Add(new PagamentoIncentivadorPIX
+                    {
+                        ChavePixOrigem = configuracaoApp.ChavePixApp,
+                        ChavePixDestino = incentivador.ChavePix,
+                        IncentivadorId = incentivador.Id,
+                        DataPagamento = DateTime.Now,
+                        IdTransacaoPIX = new Guid().ToString(),
+                        Valor = cobranca.Valor
+                    });
+
                     cobranca.StatusCobrancaRecorrente = StatusCobrancaRecorrente.PAGA;
+
+                    
                 }
-
-
 
             }
 
