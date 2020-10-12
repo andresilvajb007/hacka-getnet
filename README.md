@@ -4,21 +4,24 @@
 
 ## Objetivo
 
-O objetivo do projeto é conectar possíveis colaboradores dispostos a ajudar e incentivar o micro e pequeno empreendedor que está na busca de suporte financeiro. 
+O objetivo do projeto é conectar colaboradores dispostos a ajudar e incentivar o micro e pequeno empreendedor que está na busca de suporte financeiro. 
 
 ## Status do projeto
 
 Finalizado e entregue dia 12/10/2020
 
-## Features
+## Features Desenvolvidas
 - [x] Cadastro do micro empreendedor
 - [x] Cadastro do impulsionador
 - [x] Micro empreendedor realiza solicitação de cŕedito
-- [ ] Disparo de propagandas direcionadas para o público que se encaixa no perfil de impulsionador em potencial
 - [x] Impulsionador realiza pagamentos para solicitação de crédito específico
 - [x] Micro empreendedor faz o saque do valor de crédito acumulado
-- [x] Plataforma emite boletos mensais e envia para o micro empreendedor
 - [x] Plataforma paga mensalmente o valor corrigido aos impulsionadores
+
+## Backlog Futuro 
+- [ ] Disparo de propagandas direcionadas para o público que se encaixa no perfil de impulsionador em potencial
+- [ ] Plataforma emite boletos mensais e envia para o micro empreendedor
+- [ ] Gamificar app para gerar rotatividade e engajamento
 
 ## Demonstração da aplicação
 
