@@ -1,6 +1,24 @@
 <h3 align="center">
-  Desafio Hacka GetNet
+  O objetivo do projeto é conectar possíveis investidores dispostos a correr um risco moderado com o micro e pequeno empreendedor que está na busca de suporte financeiro. 
 </h3>
+
+## Status do projeto
+
+Finalizado e entregue dia 12/10/2020
+
+## Features
+- [x] Cadastro do micro empreendedor
+- [x] Cadastro do impulsionador
+- [x] Micro empreendedor realiza solicitação de cŕedito
+- [ ] Disparo de propagandas direcionadas para o público que se encaixa no perfil de impulsionador em potencial
+- [x] Impulsionador realiza pagamentos para solicitação de crédito específico
+- [x] Micro empreendedor faz o saque do valor de crédito acumulado
+- [x] Plataforma emite boletos mensais e envia para o micro empreendedor
+- [x] Plataforma paga mensalmente o valor corrigido aos impulsionadores
+
+## Demonstração da aplicação
+
+Toda a documentação de endpoints de nossa API pode ser lida [aqui](https://hacka-getnet.herokuapp.com/Swagger/index.html)
 
 ## :pushpin: Tecnologias
 
@@ -31,3 +49,7 @@ Para subir a API basta apertar F5 com o projeto aberto no Visual Studio ou rodar
 
 Para acessar a documentação via Swagger:
 - https://localhost:5001/index.html
+
+## License
+
+MIT © [Rocketseat](https://github.com/Rocketseat)
