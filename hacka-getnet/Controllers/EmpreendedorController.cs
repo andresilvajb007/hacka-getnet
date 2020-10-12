@@ -77,7 +77,7 @@ namespace hacka_getnet.Controllers
 
         // GET: api/Empreendedor/5
         [HttpGet("{id}")]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<EmpreendedorDTO>> GetEmpreendedor(int id)
         {
             var empreendedor = await _context.Empreendedor.Include(x => x.Endereco)
@@ -102,10 +102,12 @@ namespace hacka_getnet.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> PutEmpreendedor(int id, CadastroEmpreendedorDTO empreendedorDTO)
         {
             var empreendedor = _mapper.Map<CadastroEmpreendedorDTO, Empreendedor>(empreendedorDTO);
+            var endereco = _mapper.Map<EnderecoEmpreendedorDTO, EnderecoEmpreendedor>(empreendedorDTO.EnderecoEmpreendedorDTO);
+            var cartao = _mapper.Map<CartaoEmpreendedorDTO, CartaoEmpreendedor>(empreendedorDTO.CartaoEmpreendedorDTO);
 
             if (id != empreendedor.Id)
             {
@@ -113,6 +115,8 @@ namespace hacka_getnet.Controllers
             }
 
             _context.Entry(empreendedor).State = EntityState.Modified;
+            _context.Entry(endereco ).State = EntityState.Modified;
+            _context.Entry(cartao).State = EntityState.Modified;
 
             try
             {
@@ -141,11 +145,13 @@ namespace hacka_getnet.Controllers
         public async Task<ActionResult<EmpreendedorDTO>> PostEmpreendedor(CadastroEmpreendedorDTO empreendedorDTO)
         {
             var empreendedor = _mapper.Map<CadastroEmpreendedorDTO, Empreendedor>(empreendedorDTO);
+            empreendedor.Endereco = _mapper.Map<EnderecoEmpreendedorDTO, EnderecoEmpreendedor>(empreendedorDTO.EnderecoEmpreendedorDTO);
+            empreendedor.Cartao = _mapper.Map<CartaoEmpreendedorDTO, CartaoEmpreendedor>(empreendedorDTO.CartaoEmpreendedorDTO);
 
             _context.Empreendedor.Add(empreendedor);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEmpreendedor", new { id = empreendedor.Id }, empreendedor);
+            return CreatedAtAction("GetEmpreendedor", new { id = empreendedor.Id });
         }
 
         // DELETE: api/Empreendedor/5

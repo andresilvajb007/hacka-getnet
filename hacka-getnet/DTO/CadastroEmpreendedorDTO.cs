@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using hacka_getnet.DTO;
 
 namespace hacka_getnet.Entidades
 {
@@ -23,6 +24,10 @@ namespace hacka_getnet.Entidades
         public string Usuario { get; set; }
 
         public string Senha { get; set; }
+
+        public EnderecoEmpreendedorDTO EnderecoEmpreendedorDTO { get; set; }
+
+        public CartaoEmpreendedorDTO CartaoEmpreendedorDTO { get; set; }
 
         public CadastroEmpreendedorDTO()
         {

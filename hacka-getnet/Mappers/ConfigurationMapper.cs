@@ -23,9 +23,12 @@ namespace hacka_getnet.Mappers
             CreateMap<CartaoEmpreendedor, CartaoEmpreendedorDTO>();
 
 
-            CreateMap<EmpreendedorDTO, Empreendedor>();
+            CreateMap<EmpreendedorDTO, Empreendedor>();                
             CreateMap<IncentivadorDTO, Incentivador>();
             CreateMap<SolicitacaoCreditoDTO, SolicitacaoCredito>();
+
+            CreateMap<EnderecoEmpreendedorDTO, EnderecoEmpreendedor>();
+            CreateMap<CartaoEmpreendedorDTO, CartaoEmpreendedor>();
         }
 
     }
