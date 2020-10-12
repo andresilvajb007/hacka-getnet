@@ -188,10 +188,11 @@ namespace hacka_getnet.Controllers
                                                 .Where(x => x.Id == cobranca.EmpreendedorId)
                                                 .FirstOrDefaultAsync();
 
-                var token = await GeraTokenCartaoCredito(empreendedor.Cartao.NumeroCartao, empreendedor.Id);
+                var bearerToken = await GeraToken();
+                var token = await GeraTokenCartaoCredito(bearerToken, empreendedor.Cartao.NumeroCartao, empreendedor.CNPJ);
 
                 var payment = new Payment();
-                payment.Amount = cobranca.Valor;
+                payment.Amount = (cobranca.Valor * 100).ToString().Replace(".","");//convertendo para centavos
                 payment.SellerId = Guid.Parse(configuracaoApp.GetNetId);
                 payment.Currency = "BRL";
                 payment.Order = new Order
@@ -243,13 +244,30 @@ namespace hacka_getnet.Controllers
                         Brand = empreendedor.Cartao.Bandeira,
                         ExpirationMonth = empreendedor.Cartao.MesVencimento,
                         ExpirationYear = empreendedor.Cartao.AnoVencimento,
-                    }
-                    
+                    }                    
                 };
+
+                var json = JsonConvert.SerializeObject(payment);
+                
+                var httpClient = new HttpClient();
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, "https://api-sandbox.getnet.com.br/v1/payments/credit");
+
+                httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {bearerToken}");
+                requestMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await httpClient.SendAsync(requestMessage);
+
+                string responded = response.Content.ReadAsStringAsync().Result;
+
+                if(response.IsSuccessStatusCode)
+                {
+                    cobranca.StatusCobrancaRecorrente = StatusCobrancaRecorrente.PAGA;
+                }
 
 
 
             }
+
+            await _context.SaveChangesAsync();
 
             return Ok();
         }
@@ -284,28 +302,24 @@ namespace hacka_getnet.Controllers
         }
 
         // GET: api/SolicitacaoCredito        
-        private async Task<TokenCartao> GeraTokenCartaoCredito(string numeroCartao, int idEmpreendedor)
+        private async Task<TokenCartao> GeraTokenCartaoCredito(string bearerToken, string numeroCartao, String cnpj)
         {
             var cartao = new
             {
                 card_number = numeroCartao,
-                customer_id  = idEmpreendedor
+                customer_id  = cnpj
             };
             var json =  System.Text.Json.JsonSerializer.Serialize(cartao);
             
             var configuracaoApp = await _context.ConfiguracaoApp.FirstOrDefaultAsync();
 
-            var bearerToken = await GeraToken();
+            
             var httpClient = new HttpClient();
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, "https://api-sandbox.getnet.com.br/v1/tokens/card");
 
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {bearerToken}");
             httpClient.DefaultRequestHeaders.Add("seller_id", configuracaoApp.GetNetId);
-
-            //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-           // httpClient.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("utf8"));
-
-            requestMessage.Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            requestMessage.Content = new StringContent(json,Encoding.UTF8, "application/json");
             var response = await httpClient.SendAsync(requestMessage);
             
             Stream responded = response.Content.ReadAsStreamAsync().Result;
