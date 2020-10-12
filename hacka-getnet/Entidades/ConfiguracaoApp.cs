@@ -9,6 +9,8 @@ namespace hacka_getnet.Entidades
 
         public string ChavePixApp { get; set; }
 
+        public string GetNetId { get; set; }
+
         public double TaxaJurosACobrarDoEmpreendedor { get; set; }
 
         public double TaxaJurosAPagarAoIncentivador { get; set; }

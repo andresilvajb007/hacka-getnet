@@ -14,6 +14,10 @@ using Microsoft.AspNetCore.Authorization;
 using System.Net.Http;
 using Newtonsoft.Json;
 using hacka_getnet.DTO;
+using System.Net.Http.Headers;
+using hacka_getnet.Entidades.GetNet;
+using System.IO.Compression;
+using System.Text;
 
 namespace hacka_getnet.Controllers
 {
@@ -169,24 +173,8 @@ namespace hacka_getnet.Controllers
         }
 
 
-
-        // GET: api/SolicitacaoCredito
-        [HttpGet("teste")]        
-        public async Task<ActionResult> GetSolicitacaoCredito()
+        private async Task<string> GeraToken()
         {
-
-            //var httpClient = new HttpClient();
-            
-            //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://api-sandbox.getnet.com.br/auth/oauth/v2/token");
-            //httpClient.DefaultRequestHeaders.Add("Authorization", "Basic ZDZkOTg3MWMtMjRiMy00NGFiLTg5YTEtMjFlMzI3MjdlNTQwOmJjZjAwNjcwLTU4MWEtNDEzZS04NDY5LWY1NTljMDU5MzZkMA==");
-            //httpClient.DefaultRequestHeaders.Add("Content-Type", "application/x-www-form-urlencoded");
-            //httpClient.DefaultRequestHeaders.Add("Accept", "application/json, text/plain, */*");            
-            //request.Properties.Add("scope", "oob");
-            //request.Properties.Add("grant_type", "client_credentials");
-
-            
-            //var result = await httpClient.SendAsync(request);
-
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Basic ZDZkOTg3MWMtMjRiMy00NGFiLTg5YTEtMjFlMzI3MjdlNTQwOmJjZjAwNjcwLTU4MWEtNDEzZS04NDY5LWY1NTljMDU5MzZkMA==");
@@ -198,26 +186,54 @@ namespace hacka_getnet.Controllers
                 using (var content = new FormUrlEncodedContent(data))
                 {
                     content.Headers.Clear();
-                    content.Headers.Add("Content-Type", "application/x-www-form-urlencoded");                    
-                    
+                    content.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+
 
                     var response = await httpClient.PostAsync("https://api-sandbox.getnet.com.br/auth/oauth/v2/token", content);
 
-                    var stringJson =   await response.Content.ReadAsStringAsync();
+                    var stringJson = await response.Content.ReadAsStringAsync();
                     var token = JsonConvert.DeserializeObject<AcessTokenGetNet>(stringJson);
 
-                    return Ok(token);
+                    return  await Task.FromResult<string>( token.access_token);
                 }
             }
 
+            
+        }
 
+        // GET: api/SolicitacaoCredito        
+        private async Task<TokenCartao> GeraTokenCartaoCredito()
+        {
+            var cartao = new
+            {
+                card_number = "5155901222280001",
+                customer_id  = "teste"
+            };
+            var json =  System.Text.Json.JsonSerializer.Serialize(cartao);
+            
+            var configuracaoApp = await _context.ConfiguracaoApp.FirstOrDefaultAsync();
 
+            var bearerToken = await GeraToken();
+            var httpClient = new HttpClient();
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, "https://api-sandbox.getnet.com.br/v1/tokens/card");
 
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {bearerToken}");
+            httpClient.DefaultRequestHeaders.Add("seller_id", configuracaoApp.GetNetId);
 
+            //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+           // httpClient.DefaultRequestHeaders.AcceptCharset.Add(new StringWithQualityHeaderValue("utf8"));
 
+            requestMessage.Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            var response = await httpClient.SendAsync(requestMessage);
+            
+            Stream responded = response.Content.ReadAsStreamAsync().Result;
+            Stream decompressed = new GZipStream(responded, CompressionMode.Decompress);
+            StreamReader objReader = new StreamReader(decompressed, Encoding.UTF8);
+            string sLine =  objReader.ReadToEnd();
 
+            var token = JsonConvert.DeserializeObject<TokenCartao>(sLine);
 
-            return Ok();
+            return token;
         }
 
       

@@ -33,5 +33,6 @@
       <Folder Include="DTO\" />
       <Folder Include="Mappers\" />
       <Folder Include="Token\" />
+      <Folder Include="Entidades\GetNet\" />
     </ItemGroup>
 </Project>
