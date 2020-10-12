@@ -127,6 +127,7 @@ namespace hacka_getnet.Controllers
         public async Task<ActionResult<IncentivadorDTO>> PostIncentivador(CadastroIncentivadorDTO incentivadorDTO)
         {
             var incentivador = _mapper.Map<CadastroIncentivadorDTO, Incentivador>(incentivadorDTO);
+            incentivador.Role = "Incentivador";
             _context.Incentivador.Add(incentivador);
             await _context.SaveChangesAsync();
 

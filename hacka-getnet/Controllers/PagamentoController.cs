@@ -36,6 +36,7 @@ namespace hacka_getnet.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Incentivador")]
         public async Task<ActionResult> RealizaPagamentoSolicitacaoCredito(int idIncentivador, int idSolicitacaoCredito, decimal valor)
         {
 
@@ -84,6 +85,7 @@ namespace hacka_getnet.Controllers
         }
 
         [HttpGet("buscar-pagamentos-solicitacao")]
+        [Authorize(Roles = "Empreendedor,Incentivador")]
         public async Task<ActionResult> BuscaPagamentoSolicitacao(int idSolicitacaoCredito)
         {
             
@@ -99,6 +101,7 @@ namespace hacka_getnet.Controllers
         }
 
         [HttpGet("resgatar-pagamento")]
+        [Authorize(Roles = "Empreendedor")]
         public async Task<ActionResult> ResgatarPagamentoSolicitacao(int idSolicitacaoCredito)
         {
             var configuracaoApp = await _context.ConfiguracaoApp.FirstAsync();
@@ -160,6 +163,7 @@ namespace hacka_getnet.Controllers
         }
 
         [HttpGet("buscar-cobrancas-recorrentes")]
+        [Authorize(Roles = "Empreendedor")]
         public async Task<ActionResult> BuscaCobrancaRecorrente(int idEmpreendedor)
         {
 
@@ -174,7 +178,8 @@ namespace hacka_getnet.Controllers
             return Ok(cobrancaRecorrente.Select(x => new { x.Valor, x.DataCobranca, StatusCobrancaRecorrente = x.StatusCobrancaRecorrente.ToString() }));
         }
 
-        [HttpGet("realiza-cobranca")]
+        [HttpGet("realiza-cobranca-empreendedor")]
+        [AllowAnonymous]
         public async Task<ActionResult> RealizarCobrancaDoEmpreendedor()
         {
             var configuracaoApp = await _context.ConfiguracaoApp.FirstAsync();
@@ -183,7 +188,7 @@ namespace hacka_getnet.Controllers
             var cobrancas = await _context.CobrancaRecorrente.Where(x => x.DataCobranca.Date == data.Date &&
                                                                          x.StatusCobrancaRecorrente == StatusCobrancaRecorrente.PENDENTE_PAGAMENTO).ToListAsync();
 
-            foreach (var cobranca in cobrancas)
+            foreach(var cobranca in cobrancas)
             {
                 var pagamentoSolictacao = await _context.PagamentoSolicitacaoCreditoPIX.Where(x => x.SolicitacaoCreditoId == cobranca.SolicitacaoCreditoId).FirstOrDefaultAsync();
                 var incentivador = await _context.Incentivador.FindAsync(pagamentoSolictacao.IncentivadorId);
@@ -290,6 +295,22 @@ namespace hacka_getnet.Controllers
             return Ok();
         }
 
+
+        [HttpGet("buscar-pagamentos-recebidos-incentivador")]
+        [Authorize(Roles = "Incentivador")]
+        public async Task<ActionResult> BuscaPagamentosIncenticador(int idIncentivador)
+        {
+
+            var pagamentos = await _context.PagamentoIncentivadorPIX.Where(x => x.IncentivadorId == idIncentivador).ToListAsync();
+
+
+            if (pagamentos == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(pagamentos.Select(x => new { x.Valor, x.DataPagamento}));
+        }
 
         private async Task<string> GeraToken()
         {

@@ -148,6 +148,7 @@ namespace hacka_getnet.Controllers
             empreendedor.Endereco = _mapper.Map<EnderecoEmpreendedorDTO, EnderecoEmpreendedor>(empreendedorDTO.EnderecoEmpreendedorDTO);
             empreendedor.Cartao = _mapper.Map<CartaoEmpreendedorDTO, CartaoEmpreendedor>(empreendedorDTO.CartaoEmpreendedorDTO);
 
+            empreendedor.Role = "Empreendedor";
             _context.Empreendedor.Add(empreendedor);
             await _context.SaveChangesAsync();
 
