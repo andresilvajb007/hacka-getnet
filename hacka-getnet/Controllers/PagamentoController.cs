@@ -36,7 +36,7 @@ namespace hacka_getnet.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Incentivador")]
+        //[Authorize(Roles = "Incentivador")]
         public async Task<ActionResult> RealizaPagamentoSolicitacaoCredito(int idIncentivador, int idSolicitacaoCredito, decimal valor)
         {
 
@@ -85,7 +85,7 @@ namespace hacka_getnet.Controllers
         }
 
         [HttpGet("buscar-pagamentos-solicitacao")]
-        [Authorize(Roles = "Empreendedor,Incentivador")]
+        //[Authorize(Roles = "Empreendedor,Incentivador")]
         public async Task<ActionResult> BuscaPagamentoSolicitacao(int idSolicitacaoCredito)
         {
             
@@ -101,7 +101,7 @@ namespace hacka_getnet.Controllers
         }
 
         [HttpGet("resgatar-pagamento")]
-        [Authorize(Roles = "Empreendedor")]
+        //[Authorize(Roles = "Empreendedor")]
         public async Task<ActionResult> ResgatarPagamentoSolicitacao(int idSolicitacaoCredito)
         {
             var configuracaoApp = await _context.ConfiguracaoApp.FirstAsync();
@@ -163,7 +163,7 @@ namespace hacka_getnet.Controllers
         }
 
         [HttpGet("buscar-cobrancas-recorrentes")]
-        [Authorize(Roles = "Empreendedor")]
+        //[Authorize(Roles = "Empreendedor")]
         public async Task<ActionResult> BuscaCobrancaRecorrente(int idEmpreendedor)
         {
 
@@ -297,7 +297,7 @@ namespace hacka_getnet.Controllers
 
 
         [HttpGet("buscar-pagamentos-recebidos-incentivador")]
-        [Authorize(Roles = "Incentivador")]
+        //[Authorize(Roles = "Incentivador")]
         public async Task<ActionResult> BuscaPagamentosIncenticador(int idIncentivador)
         {
 
