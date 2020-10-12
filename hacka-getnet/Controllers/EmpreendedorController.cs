@@ -77,10 +77,14 @@ namespace hacka_getnet.Controllers
 
         // GET: api/Empreendedor/5
         [HttpGet("{id}")]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<EmpreendedorDTO>> GetEmpreendedor(int id)
         {
-            var empreendedor = await _context.Empreendedor.FindAsync(id);
+            var empreendedor = await _context.Empreendedor.Include(x => x.Endereco)
+                                            .Include(x => x.Cartao)
+                                            .Where(x => x.Id == id)
+                                            .FirstOrDefaultAsync();
+
 
             if (empreendedor == null)
             {
