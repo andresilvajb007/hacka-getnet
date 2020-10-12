@@ -10,7 +10,7 @@ O objetivo do projeto é conectar colaboradores dispostos a ajudar e incentivar 
 
 Finalizado e entregue dia 12/10/2020
 
-## Features Desenvolvidas
+## Features desenvolvidas
 - [x] Cadastro do micro empreendedor
 - [x] Cadastro do impulsionador
 - [x] Micro empreendedor realiza solicitação de cŕedito
@@ -18,7 +18,7 @@ Finalizado e entregue dia 12/10/2020
 - [x] Micro empreendedor faz o saque do valor de crédito acumulado
 - [x] Plataforma paga mensalmente o valor corrigido aos impulsionadores
 
-## Backlog Futuro 
+## Backlog futuro 
 - [ ] Disparo de propagandas direcionadas para o público que se encaixa no perfil de impulsionador em potencial
 - [ ] Plataforma emite boletos mensais e envia para o micro empreendedor
 - [ ] Gamificar app para gerar rotatividade e engajamento
