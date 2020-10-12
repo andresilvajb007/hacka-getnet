@@ -153,6 +153,20 @@ namespace hacka_getnet.Controllers
             return Ok();
         }
 
+        [HttpGet("buscar-cobrancas-recorrentes")]
+        public async Task<ActionResult> BuscaCobrancaRecorrente(int idEmpreendedor)
+        {
+
+            var cobrancaRecorrente =  await _context.CobrancaRecorrente.Where(x => x.EmpreendedorId == idEmpreendedor).ToListAsync();
+            
+
+            if (cobrancaRecorrente == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(cobrancaRecorrente.Select(x => new { x.Valor, x.DataCobranca, StatusCobrancaRecorrente = x.StatusCobrancaRecorrente.ToString() }));
+        }
 
 
 
