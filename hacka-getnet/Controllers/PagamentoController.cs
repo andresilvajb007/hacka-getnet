@@ -207,7 +207,7 @@ namespace hacka_getnet.Controllers
                 payment.Currency = "BRL";
                 payment.Order = new Order
                 {
-                    OrderId = new Guid(),
+                    OrderId = Guid.NewGuid(),
                     SalesTax = 0,
                     ProductType = "service"
                 };
