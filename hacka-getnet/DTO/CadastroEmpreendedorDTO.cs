@@ -9,6 +9,8 @@ namespace hacka_getnet.Entidades
     {
         public int Id { get; set; }
 
+        public string Email { get; set; }
+
         public string Nome { get; set; }
 
         public string PrimeiroNome { get; set; }

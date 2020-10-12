@@ -172,10 +172,10 @@ namespace hacka_getnet.Controllers
             return Ok(cobrancaRecorrente.Select(x => new { x.Valor, x.DataCobranca, StatusCobrancaRecorrente = x.StatusCobrancaRecorrente.ToString() }));
         }
 
-
         [HttpGet("realiza-cobranca")]
         public async Task<ActionResult> RealizarCobrancaDoEmpreendedor()
         {
+            var configuracaoApp = await _context.ConfiguracaoApp.FirstAsync();
             var data = new DateTime(2020, 11, 11);
 
             var cobrancas = await _context.CobrancaRecorrente.Where(x => x.DataCobranca.Date == data.Date &&
@@ -183,7 +183,71 @@ namespace hacka_getnet.Controllers
 
             foreach (var cobranca in cobrancas)
             {
-                var empreendedor = await _context.Empreendedor.FindAsync(cobranca.EmpreendedorId);
+                var empreendedor = await _context.Empreendedor.Include(x => x.Endereco)
+                                                .Include(x => x.Cartao)
+                                                .Where(x => x.Id == cobranca.EmpreendedorId)
+                                                .FirstOrDefaultAsync();
+
+                var token = await GeraTokenCartaoCredito(empreendedor.Cartao.NumeroCartao, empreendedor.Id);
+
+                var payment = new Payment();
+                payment.Amount = cobranca.Valor;
+                payment.SellerId = Guid.Parse(configuracaoApp.GetNetId);
+                payment.Currency = "BRL";
+                payment.Order = new Order
+                {
+                    OrderId = new Guid(),
+                    SalesTax = 0,
+                    ProductType = "service"
+                };
+
+                payment.Customer = new Customer
+                {
+                    CustomerId = empreendedor.Id.ToString(),
+                    FirstName = empreendedor.PrimeiroNome,
+                    LastName = empreendedor.UltimoNome,
+                    Name = empreendedor.Nome,
+                    Email = empreendedor.Email,
+                    DocumentType = "CNPJ",
+                    DocumentNumber = empreendedor.CNPJ,
+                    PhoneNumber = empreendedor.Celular,
+                    BillingAddress = new BillingAddress
+                    {
+                        Street = empreendedor.Endereco.Logradouro,
+                        Number = empreendedor.Endereco.Numero,
+                        Complement = empreendedor.Endereco.Complemento,
+                        District = empreendedor.Endereco.Bairro,
+                        City = empreendedor.Endereco.Cidade,
+                        State = empreendedor.Endereco.SiglaEstado,
+                        Country = empreendedor.Endereco.Pais,
+                        PostalCode = empreendedor.Endereco.CEP
+                    }
+
+                };
+
+                payment.Credit = new Credit
+                {
+                    Authenticated = false,
+                    Delayed = false,
+                    PreAuthorization = false,
+                    SaveCardData = false,
+                    TransactionType = "transaction_type",
+                    NumberInstallments = 1,
+                    SoftDescriptor = "Cobranca APP",
+                    DynamicMcc = 1799,
+                    Card = new Card
+                    {
+                        NumberToken = token.number_token,
+                        CardholderName = empreendedor.Cartao.NomePortador,
+                        SecurityCode = empreendedor.Cartao.CVV,
+                        Brand = empreendedor.Cartao.Bandeira,
+                        ExpirationMonth = empreendedor.Cartao.MesVencimento,
+                        ExpirationYear = empreendedor.Cartao.AnoVencimento,
+                    }
+                    
+                };
+
+
 
             }
 
@@ -220,12 +284,12 @@ namespace hacka_getnet.Controllers
         }
 
         // GET: api/SolicitacaoCredito        
-        private async Task<TokenCartao> GeraTokenCartaoCredito()
+        private async Task<TokenCartao> GeraTokenCartaoCredito(string numeroCartao, int idEmpreendedor)
         {
             var cartao = new
             {
-                card_number = "5155901222280001",
-                customer_id  = "teste"
+                card_number = numeroCartao,
+                customer_id  = idEmpreendedor
             };
             var json =  System.Text.Json.JsonSerializer.Serialize(cartao);
             
