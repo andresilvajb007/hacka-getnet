@@ -81,7 +81,7 @@ namespace hacka_getnet.Controllers
         [HttpGet("buscar-pagamentos-solicitacao")]
         public async Task<ActionResult> BuscaPagamentoSolicitacao(int idSolicitacaoCredito)
         {
-
+            
             var solicitacaoCredito = await _context.SolicitacaoCredito.FindAsync(idSolicitacaoCredito);
             var pagamentos = _context.PagamentoSolicitacaoCreditoPIX.Where(x => x.SolicitacaoCreditoId == idSolicitacaoCredito).ToList();
 
@@ -96,7 +96,7 @@ namespace hacka_getnet.Controllers
         [HttpGet("resgatar-pagamento")]
         public async Task<ActionResult> ResgatarPagamentoSolicitacao(int idSolicitacaoCredito)
         {
-
+            var configuracaoApp = await _context.ConfiguracaoApp.FirstAsync();
             var solicitacaoCredito = await _context.SolicitacaoCredito.FindAsync(idSolicitacaoCredito);
 
             if (solicitacaoCredito == null)
@@ -119,9 +119,11 @@ namespace hacka_getnet.Controllers
 
             //Envia do PIX Plim para o PIX da Dona Maria
             var totalPagamento = pagamentos.Sum(x => x.Valor);
+            var juros = (totalPagamento * (decimal)configuracaoApp.TaxaJurosACobrarDoEmpreendedor) / 100;
+            totalPagamento = totalPagamento + juros;
 
             //atualiza o status de cada pagamento
-            foreach(var pagamento in pagamentos)
+            foreach (var pagamento in pagamentos)
             {
                 pagamento.StatusPagamento = StatusPagamento.RESGATADO;
             }
@@ -135,7 +137,7 @@ namespace hacka_getnet.Controllers
                 new CobrancaRecorrente
                 {
                     EmpreendedorId = empreendedor.Id,
-                    DataCobranca = DateTime.Now.AddMonths(1),
+                    DataCobranca = DateTime.Now.AddMonths(i),
                     Valor = totalPagamento / solicitacaoCredito.QuantidadeParcelasReembolso,
                 });
             }
