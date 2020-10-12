@@ -25,6 +25,8 @@ namespace hacka_getnet.Entidades
 
         public string CEP { get; set; }
 
+        public string Bairro { get; set; }
+
         public EnderecoEmpreendedor()
         {
         }

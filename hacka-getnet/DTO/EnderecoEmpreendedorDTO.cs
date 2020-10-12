@@ -21,6 +21,8 @@ namespace hacka_getnet.DTO
 
         public string CEP { get; set; }
 
+        public string Bairro { get; set; }
+
         public EnderecoEmpreendedorDTO()
         {
         }
