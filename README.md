@@ -4,7 +4,7 @@
 
 ## Objetivo
 
-O objetivo do projeto é conectar possíveis investidores dispostos a correr um risco moderado com o micro e pequeno empreendedor que está na busca de suporte financeiro. 
+O objetivo do projeto é conectar possíveis colaboradores dispostos a ajudar e incentivar o micro e pequeno empreendedor que está na busca de suporte financeiro. 
 
 ## Status do projeto
 
