@@ -13,7 +13,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [Auto Mapper](https://automapper.org)
 - [FireBase Storage](https://firebase.google.com/docs/storage)
 - [Token JWT](https://docs.microsoft.com/pt-br/aspnet/core/security/authorization/introduction?view=aspnetcore-3.1)
-
+- [API's GetNet](https://developers.getnet.com.br)
 
 ## :computer: Projeto
 
