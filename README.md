@@ -23,7 +23,7 @@ Finalizado e entregue dia 12/10/2020
 - [ ] Plataforma emite boletos mensais e envia para o micro empreendedor
 - [ ] Gamificar app para gerar rotatividade e engajamento
 
-## Demonstração da aplicação
+## :computer: Demonstração da aplicação
 
 Toda a documentação de endpoints de nossa API pode ser lida [aqui](https://hacka-getnet.herokuapp.com/Swagger/index.html)
 
@@ -39,11 +39,6 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [FireBase Storage](https://firebase.google.com/docs/storage)
 - [Token JWT](https://docs.microsoft.com/pt-br/aspnet/core/security/authorization/introduction?view=aspnetcore-3.1)
 - [API's GetNet](https://developers.getnet.com.br)
-
-## :computer: Projeto
-
-API`s para tratar transacoes de credito
-
 
 ## :point_down: Executando o projeto
 
