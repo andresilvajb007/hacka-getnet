@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 namespace hacka_getnet.Entidades
 {
+    public enum StatusSolicitacaoCredito
+    {
+        EM_ANDAMENTO = 0,
+        RESGATADA = 1,
+        ENCERRADA = 3,
+    }
+
     public class SolicitacaoCredito
     {
         public int Id { get; set; }
@@ -23,6 +30,10 @@ namespace hacka_getnet.Entidades
         public string UrlImagem { get; set; }
 
         public int QuantidadeParcelasReembolso { get; set; }
+
+        public List<PagamentoSolicitacaoCreditoPIX> Pagamentos { get; set; }
+
+        public StatusSolicitacaoCredito StatusSolicitacaoCredito { get; set; }
 
 
         public SolicitacaoCredito()

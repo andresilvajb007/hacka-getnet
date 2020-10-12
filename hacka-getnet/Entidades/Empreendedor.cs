@@ -20,6 +20,10 @@ namespace hacka_getnet.Entidades
 
         public List<SolicitacaoCredito> SolicitacoesCredito { get; set; }
 
+        public List<PagamentoEmpreendedorPIX> PagamentosRecebidos { get; set; }
+
+        public List<CobrancaRecorrente> Cobrancas { get; set; }
+
         public Empreendedor()
         {
         }
