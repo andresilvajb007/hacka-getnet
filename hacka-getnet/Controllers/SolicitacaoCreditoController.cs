@@ -30,7 +30,7 @@ namespace hacka_getnet.Controllers
 
         // GET: api/SolicitacaoCredito
         [HttpGet]
-        //[Authorize(Roles = "Incentivador, Empreendedor")]
+        [Authorize(Roles = "Incentivador, Empreendedor")]
         public async Task<ActionResult<IEnumerable<SolicitacaoCreditoDTO>>> GetSolicitacaoCredito()
         {
             var lista = await _context.SolicitacaoCredito.ToListAsync();
@@ -41,7 +41,7 @@ namespace hacka_getnet.Controllers
 
         // GET: api/SolicitacaoCredito/5
         [HttpGet("{id}")]
-        //[Authorize(Roles = "Incentivador, Empreendedor")]
+        [Authorize(Roles = "Incentivador, Empreendedor")]
         public async Task<ActionResult<SolicitacaoCreditoDTO>> GetSolicitacaoCredito(int id)
         {
             var solicitacaoCredito = await _context.SolicitacaoCredito.FindAsync(id);
@@ -60,7 +60,7 @@ namespace hacka_getnet.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        //[Authorize(Roles = "Empreendedor")]
+        [Authorize(Roles = "Empreendedor")]
         public async Task<ActionResult<SolicitacaoCreditoDTO>> PostSolicitacaoCredito(
             [FromForm] CadastroSolicitacaoCreditoDTO solicitacaoCreditoDTO,
             IFormFile file)
