@@ -4,28 +4,23 @@
 
 ## 🔗 Objetivo
 
-O objetivo do projeto é conectar colaboradores dispostos a ajudar e incentivar o micro e pequeno empreendedor que está na busca de suporte financeiro. 
+O objetivo do projeto é  
 
 ## 🚀 Status do projeto
 
 Finalizado e entregue dia 12/10/2020
 
 ## :pushpin: Features desenvolvidas
-- [x] Cadastro do micro empreendedor
-- [x] Cadastro do impulsionador
-- [x] Micro empreendedor realiza solicitação de cŕedito
-- [x] Impulsionador realiza pagamentos para solicitação de crédito específico
-- [x] Micro empreendedor faz o saque do valor de crédito acumulado
-- [x] Plataforma paga mensalmente o valor corrigido aos impulsionadores
+- [x] ...
+
 
 ## 🚧 Backlog futuro 
-- [ ] Disparo de propagandas direcionadas para o público que se encaixa no perfil de impulsionador em potencial
-- [ ] Plataforma emite boletos mensais e envia para o micro empreendedor
-- [ ] Gamificar app para gerar rotatividade e engajamento
+- [ ] ...
+
 
 ## :computer: Demonstração da aplicação
 
-Toda a documentação de endpoints de nossa API pode ser lida [aqui](https://hacka-getnet.herokuapp.com/Swagger/index.html)
+Toda a documentação de endpoints de nossa API pode ser lida [aqui](https://mega-hacka-5.herokuapp.com/index.html)
 
 ##  🛠 Tecnologias
 
@@ -36,9 +31,6 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [Swagger](https://docs.microsoft.com/pt-br/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-3.1&tabs=visual-studio)
 - [PostGreSQL](https://www.postgresql.org)
 - [Auto Mapper](https://automapper.org)
-- [FireBase Storage](https://firebase.google.com/docs/storage)
-- [Token JWT](https://docs.microsoft.com/pt-br/aspnet/core/security/authorization/introduction?view=aspnetcore-3.1)
-- [API's GetNet](https://developers.getnet.com.br)
 
 ## :point_down: Executando o projeto
 
